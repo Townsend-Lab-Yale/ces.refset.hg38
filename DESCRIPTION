@@ -1,0 +1,20 @@
+Package: ces.refset.hg38
+Title: Reference data set (hg38) for cancereffectsizeR package
+Version: 1.0.0
+Authors@R: 
+    person(given = "Jeff",
+           family = "Mandell",
+           role = c("aut", "cre"),
+           email = "jeff.mandell@yale.edu",
+           comment = c(ORCID = "0000-0002-3839-2543"))
+Description: A collection of reference data ready to be used with cancereffectsizeR in projects that use the hg38/GRCh38 builds of the human genome.
+License: GPL-3
+Encoding: UTF-8
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 3.5)
+Imports:
+  cancereffectsizeR (>= 2.3)
+
