@@ -8,4 +8,4 @@
   assign(objname, refset, envir=ns)
   namespaceExport(ns, objname)
 }
-NULL
+
