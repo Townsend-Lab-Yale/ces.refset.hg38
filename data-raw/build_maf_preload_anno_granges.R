@@ -42,7 +42,7 @@ saveRDS(combined, 'inst/refset/maf_preload_anno/gnomad_common_variation_granges.
 
 
 ## Step 2: RepeatMasker
-# Download RepeatMasker hg19 annotations from UCSC genome browser
+# Download RepeatMasker hg38 annotations from UCSC genome browser
 rmsk = fread(ucsc_rmsk_bed) # will respect BED coordinate format
 rmsk = rmsk[, .(chr = V1, start = V2, end = V3)]
 rmsk = makeGRangesFromDataFrame(rmsk, keep.extra.columns = F, ignore.strand = T, starts.in.df.are.0based = T)
@@ -50,7 +50,7 @@ seqlevelsStyle(rmsk) = "NCBI" # remove chr prefixes to match curr_maf data
 rmsk = rmsk[seqnames(rmsk) %in% c(1:22, 'X', 'Y')] # restrict to primary contigs
 rmsk = reduce(rmsk)
 setattr(rmsk, "anno_col_name", "repetitive_region")
-saveRDS(rmsk, "inst/refset/maf_preload_anno/repeat_masked_hg19_granges.rds", compress = 'xz')
+saveRDS(rmsk, "inst/refset/maf_preload_anno/repeat_masked_hg38_granges.rds", compress = 'xz')
 
 
 ## Step 3: COSMIC mutations

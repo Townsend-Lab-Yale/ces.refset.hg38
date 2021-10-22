@@ -1,8 +1,11 @@
 library(data.table)
 library(rtracklayer)
+library(cancereffectsizeR)
 
+# Require cancereffectsizeR >= 2.3.1 for latest version of refset due to small changes in create_refset/build_RefCDS
+stopifnot(packageVersion('cancereffectsizeR') >= as.package_version('2.3.1'))
 
-# External data sources:
+# External data source:
 # Gencode GRCh38 "basic" GTF, release 38
 
 # Loading Gencode GTF, release 38 (latest release as of 09/15/21)
@@ -16,13 +19,19 @@ gen[is.na(support) | support == "NA", support := '6'] # yeah, both "NA" and NAs
 gen[, support := as.numeric(support)]
 
 
-# For each gene, take the CDS regions for only its most-supported transcripts
-best_by_gene = gen[type == 'CDS', .SD[support == min(support)], by = "gene_id"]
-sum(width(reduce(makeGRangesFromDataFrame(best_by_gene)))) # 32.9 Mb (basically same as old RefCDS)
+# For each gene, prioritize CCDS (consensus CDS) with highest transcript support, and then
+# for genes with no such transcripts, accept the most-supported non-CCDS transcripts. When
+# there are multiple transcripts tied for most supported, keep them all.
+just_ccds = gen[type == 'CDS' & ! is.na(ccdsid), .SD[support == min(support)], by = "gene_id"]
+missing_genes = setdiff(gen$gene_id, just_ccds$gene_id)
+from_missing = gen[missing_genes, on = 'gene_id'][type == 'CDS', .SD[support == min(support)], by = "gene_id"]
+best_by_gene = rbind(just_ccds, from_missing)
+
+sum(width(reduce(makeGRangesFromDataFrame(best_by_gene)))) # 33.1 Mb (similar to old RefCDS)
 
 ## A few transcripts will be tossed by build_RefCDS, but most will be good
 # uniqueN(best_by_gene$gene_id) # 19,955
-# uniqueN(best_by_gene$transcript_id) # 33,865
+# uniqueN(best_by_gene$transcript_id) # 30,654
 
 
 # chr17:7675994 (TP53) is not at an "essential splice site" as defined by Martincorena et al.,
@@ -34,20 +43,17 @@ sum(width(reduce(makeGRangesFromDataFrame(best_by_gene)))) # 32.9 Mb (basically 
 custom_splice_list = best_by_gene[gene_name == "TP53" & start == 7675994, .(protein_id, start)]
 custom_splice_list = setNames(as.list(custom_splice_list$start), custom_splice_list$protein_id)
 
-refcds = build_RefCDS(gtf = best_by_gene, genome = 'hg38', use_all_transcripts = T, 
+refcds = build_RefCDS(gtf = best_by_gene, genome = 'hg38', use_all_transcripts = TRUE, 
                       additional_essential_splice_pos = custom_splice_list)
 
-# For a default exome, we'll take all coding regions (with no transcript support filtering)
-exome = reduce(makeGRangesFromDataFrame(gen[type == 'CDS']))
+# For a default exome, we'll take all exon regions of protein-coding genes (with no transcript support filtering)
+# This gives 80 Mb due to UTRs, as opposed to 34.7 Mb if just CDS regions were used.
+exome = reduce(makeGRangesFromDataFrame(gen[type == 'exon']))
 
-# 100bp padding would bring in most commonly callable UTR regions, and it would increase
-# the total size of the regions from 34.7 Mb to 73.1 Mb. Instead, we'll leave padding at
-# 0, since users can keep out-of-coverage data anyway. preload_maf() can help a user
-# decide whether uncovered calls are mostly valid calls from wide exome capture kits, or
-# identify likely sequencing/calling error.
 dir.create('tmp_ref') # will move data into refset package inst/refset directory
 
-export.bed(exome, 'hg38_gencode38_cds_regions.bed')
 create_refset(output_dir = "tmp_ref/", refcds_output = refcds, species_name = 'human',
               genome_build_name = 'hg38', BSgenome_name = 'hg38', supported_chr = c(1:22, 'X', 'Y'), 
-              default_exome_bed = 'hg38_gencode38_cds_regions.bed', exome_interval_padding = 0)
+              default_exome = exome, exome_interval_padding = 0)
+
+# Finish by copying into inst/refset

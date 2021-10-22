@@ -1,3 +1,7 @@
+# ces.refset.hg38 1.1.0
+* Modest change to transcript set selection to prioritize consensus coding regions (CCDS) and reduce the number of relatively redundant transcripts per gene. (All transcripts still taken from Gencode basic gene annotations, release 38.)
+* Default exome expanded to cover all exon regions of protein-coding genes (as opposed to just CDS regions).
+
 # ces.refset.hg38 1.0.0
 * Initial release of hg38 reference data package.
 * Uses Gencode "basic" gene annotations (release 38) and COSMIC v3.2 signature definitions.
