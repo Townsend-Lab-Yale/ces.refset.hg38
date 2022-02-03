@@ -1,3 +1,7 @@
+# ces.refset.hg38 1.2.0
+* Corrected gene trinculeotide content proportions. Incorrect values were caused by a bug in cancereffectsizeR::create_refset() that was fixed in cancereffectsizeR v2.4.0.
+* Removed some extraneous transcripts from RefCDS (transcript where all exons were already included in other, longer transcripts).
+
 # ces.refset.hg38 1.1.0
 * Modest change to transcript set selection to prioritize consensus coding regions (CCDS) and reduce the number of relatively redundant transcripts per gene. (All transcripts still taken from Gencode basic gene annotations, release 38.)
 * Default exome expanded to cover all exon regions of protein-coding genes (as opposed to just CDS regions).

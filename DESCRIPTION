@@ -1,6 +1,6 @@
 Package: ces.refset.hg38
 Title: Reference data set (hg38) for cancereffectsizeR package
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: 
     person(given = "Jeff",
            family = "Mandell",
