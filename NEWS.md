@@ -1,3 +1,6 @@
+# ces.refset.hg38 1.2.1
+* Added BSgenome.Hsapiens.UCSC.hg38 dependency to DESCRIPTION.
+
 # ces.refset.hg38 1.2.0
 * Corrected gene trinculeotide content proportions. Incorrect values were caused by a bug in cancereffectsizeR::create_refset() that was fixed in cancereffectsizeR v2.4.0.
 * Removed some extraneous transcripts from RefCDS (transcript where all exons were already included in other, longer transcripts).
