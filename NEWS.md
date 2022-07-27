@@ -1,3 +1,6 @@
+# ces.refset.hg38 1.2.2
+* A tweak to ensure package can load without an internet connection.
+
 # ces.refset.hg38 1.2.1
 * Added BSgenome.Hsapiens.UCSC.hg38 dependency to DESCRIPTION.
 

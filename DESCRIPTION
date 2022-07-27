@@ -1,6 +1,6 @@
 Package: ces.refset.hg38
 Title: Reference data set (hg38) for cancereffectsizeR package
-Version: 1.2.1
+Version: 1.2.2
 Authors@R: 
     person(given = "Jeff",
            family = "Mandell",
@@ -12,7 +12,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: false
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.0
 biocViews:
 Remotes: Townsend-Lab-Yale/cancereffectsizeR
 Depends: 
@@ -20,4 +20,3 @@ Depends:
 Imports:
     cancereffectsizeR (>= 2.3),
     BSgenome.Hsapiens.UCSC.hg38
-
