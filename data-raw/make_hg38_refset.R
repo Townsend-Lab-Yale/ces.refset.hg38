@@ -91,7 +91,7 @@ dir.create('tmp_ref') # will move data into refset package inst/refset directory
 create_refset(output_dir = "tmp_ref/", refcds_anno = refcds_anno, refcds_dndscv = refcds_dndscv,
               species_name = 'human', genome_build_name = 'hg38', BSgenome_name = 'hg38', 
               supported_chr = c(1:22, 'X', 'Y'), default_exome = exome, exome_interval_padding = 0,
-              transcript_info = transcript_info)
+              transcripts = transcript_info)
 
 
 

@@ -1,3 +1,9 @@
+# ces.refset.hg38 1.3.0
+* Annotations are now derived from the Gencode v45 basic annotation GTF.
+* More information about coding transcripts is now available, including which are canonical (MANE) transcripts.
+* Coding and noncoding regions of protein-coding and noncoding transcripts are viewable in a transcript table.
+* Added COSMIC SBS signature definitions v3.4.
+
 # ces.refset.hg38 1.2.2
 * A tweak to ensure package can load without an internet connection.
 
